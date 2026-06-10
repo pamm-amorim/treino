@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Treino" />
+  <title>Plano de Força</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      background: #0A0A0F;
+      color: #F5F5F5;
+      font-family: Georgia, 'Times New Roman', serif;
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+    a { color: inherit; }
+
+    /* Header */
+    #header {
+      padding: 48px 24px 0;
+      border-bottom: 1px solid #1a1a2e;
+    }
+    #header .eyebrow {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #666;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    #header h1 {
+      font-size: 28px;
+      font-weight: normal;
+      letter-spacing: -0.5px;
+      color: #F5F5F5;
+      margin-bottom: 4px;
+    }
+    #header p {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 24px;
+    }
+
+    /* Tabs */
+    #tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    #tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      background: transparent;
+      color: #666;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px 8px 0 0;
+      padding: 10px 16px;
+      font-size: 12px;
+      font-family: Georgia, serif;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .tab-btn.active {
+      color: #fff;
+      border-bottom-color: transparent;
+    }
+
+    /* Content */
+    #content { padding: 24px; }
+
+    /* Focus row */
+    #focus-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    #focus-eyebrow {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    #focus-label { font-size: 16px; color: #E5E5E5; }
+    #counter {
+      background: #1a1a1a;
+      border-radius: 12px;
+      padding: 8px 14px;
+      text-align: center;
+      min-width: 52px;
+    }
+    #counter-num { font-size: 20px; font-weight: bold; }
+    #counter-den { font-size: 10px; color: #555; letter-spacing: 1px; }
+
+    /* Exercise list */
+    #exercise-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .ex-card {
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.2s;
+      border: 1px solid #1e1e2a;
+      background: #111116;
+    }
+    .ex-card.done {
+      background: #0d1f0d;
+      border-color: #1a4a1a;
+      opacity: 0.7;
+    }
+
+    .ex-header {
+      display: flex;
+      align-items: center;
+      padding: 14px 16px;
+      cursor: pointer;
+      gap: 12px;
+    }
+
+    .ex-check {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid #333;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+      cursor: pointer;
+      font-size: 12px;
+      color: #fff;
+    }
+    .ex-check.checked { background: var(--day-color); border-color: var(--day-color); }
+
+    .ex-info { flex: 1; min-width: 0; }
+    .ex-name {
+      font-size: 15px;
+      color: #E5E5E5;
+      margin-bottom: 4px;
+    }
+    .ex-card.done .ex-name { text-decoration: line-through; }
+    .ex-meta {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .ex-sets { font-size: 12px; color: #888; }
+    .ex-tag {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-family: Arial, sans-serif;
+      letter-spacing: 0.5px;
+    }
+
+    .ex-chevron {
+      color: #444;
+      font-size: 11px;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .ex-chevron.open { transform: rotate(180deg); }
+
+    .ex-body {
+      display: none;
+      padding: 12px 16px 16px 50px;
+      border-top: 1px solid #1e1e2a;
+    }
+    .ex-body.open { display: block; }
+    .ex-notes {
+      font-size: 13px;
+      color: #aaa;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .ex-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .ex-equip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #555;
+      background: #1a1a1a;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-family: Arial, sans-serif;
+    }
+    .ex-video {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #FF4444;
+      background: #1a1010;
+      border: 1px solid #3a1a1a;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Info boxes */
+    .info-box {
+      margin-top: 28px;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .info-box.safety {
+      background: #0f1a0f;
+      border: 1px solid #1a4a1a;
+    }
+    .info-box.neutral {
+      background: #111116;
+      border: 1px solid #1e1e2a;
+      margin-top: 20px;
+    }
+    .info-box-title {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      font-family: Arial, sans-serif;
+    }
+    .safety .info-box-title { color: #4ade80; }
+    .neutral .info-box-title { color: #888; }
+    .safety-text { font-size: 13px; color: #86efac; line-height: 1.8; }
+    .safety-sub { font-size: 11px; color: #555; margin-top: 10px; font-family: Arial, sans-serif; }
+
+    .week-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .week-row:last-child { border-bottom: none; }
+    .week-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .week-day { font-size: 11px; color: #555; width: 60px; font-family: Arial, sans-serif; }
+    .week-label { font-size: 13px; }
+
+    .prog-row {
+      display: flex;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .prog-row:last-child { border-bottom: none; }
+    .prog-week { font-size: 11px; color: #7C3AED; width: 70px; flex-shrink: 0; padding-top: 1px; font-family: Arial, sans-serif; }
+    .prog-desc { font-size: 13px; color: #888; line-height: 1.6; }
+  </style>
+</head>
+<body>
+
+<div id="header">
+  <div class="eyebrow">Pós-Cesárea · 8 semanas +</div>
+  <h1>Plano de Força</h1>
+  <p>4x semana · ~30 min · Elásticos + Peso corporal</p>
+  <div id="tabs"></div>
+</div>
+
+<div id="content">
+  <div id="focus-row">
+    <div>
+      <div id="focus-eyebrow"></div>
+      <div id="focus-label"></div>
+    </div>
+    <div id="counter">
+      <div id="counter-num"></div>
+      <div id="counter-den"></div>
+    </div>
+  </div>
+  <div id="exercise-list"></div>
+
+  <!-- Safety box -->
+  <div class="info-box safety">
+    <div class="info-box-title">⚠ Sinais de Parar Imediatamente</div>
+    <div class="safety-text">
+      · Dor ou pressão na cicatriz da cesárea<br>
+      · Abaulamento visível na linha central do abdômen<br>
+      · Sensação de "peso" ou pressão pélvica<br>
+      · Perda de urina durante o exercício<br>
+      · Sangramento aumentado após o treino
+    </div>
+    <div class="safety-sub">Qualquer sinal → interrompa o treino e consulte a médica e fisioterapeuta pélvica.</div>
+  </div>
+
+  <!-- Weekly schedule -->
+  <div class="info-box neutral">
+    <div class="info-box-title">Sugestão de Semana</div>
+    <div id="week-rows"></div>
+  </div>
+
+  <!-- Progressão -->
+  <div class="info-box neutral" style="margin-bottom:20px">
+    <div class="info-box-title">Progressão Sugerida</div>
+    <div id="prog-rows"></div>
+  </div>
+</div>
+
+<script>
+const days = [
+  {
+    label: "Dia A",
+    focus: "Inferior I — Glúteos & Posterior",
+    color: "#7C3AED",
+    accent: "#A78BFA",
+    exercises: [
+      { name: "Ativação de Core Profundo", sets: "1 série", reps: "5 min", tag: "Core", equipment: "Colchonete", video: "https://youtu.be/WIq_Ev-weGo?si=ODDb77FRc4lp4PJE", notes: "Respiração diafragmática + ativação do transverso. Deitada, inspire pelo nariz expandindo a barriga, expire pela boca contraindo o transverso (como se fosse apertar o umbigo para dentro e para cima). Base de tudo — não pule." },
+      { name: "Glute Bridge", sets: "3 séries", reps: "15 reps", tag: "Glúteo", equipment: "Elástico curto", video: "https://youtube.com/shorts/p5N_fok9YCM?si=s_P6cstaHIPVz5ah", notes: "Deitada, pés apoiados, elevar o quadril contraindo glúteos. Segure 2s no topo. Progrida com elástico curto roxo nos joelhos." },
+      { name: "Hip Thrust com Elástico", sets: "3 séries", reps: "12 reps", tag: "Glúteo", equipment: "Elástico longo", video: "https://youtube.com/shorts/4a1gjcz9nuw?si=VQTjxHc-CGurqcV_", notes: "Ombros apoiados na borda do sofá ou cama. Elástico longo vermelho sobre o quadril ancorado pelos pés. Controle a descida." },
+      { name: "Romanian Deadlift com Elástico", sets: "3 séries", reps: "12 reps", tag: "Posterior", equipment: "Elástico longo", video: "https://youtube.com/shorts/jaRAR9l1e2o?si=6YYsCSut7kaVMm5g", notes: "Em pé, elástico longo sob os pés, segure as pontas. Incline o tronco mantendo coluna neutra, sinta o alongamento do isquiotibial. Sem flexão excessiva do tronco." },
+      { name: "Clamshell", sets: "3 séries", reps: "15 reps cada lado", tag: "Glúteo Médio", equipment: "Elástico curto", video: "https://youtube.com/shorts/6rWe6tLc_KM?si=_O7w3EBEHRONoY-A", notes: "Deitada de lado, joelhos fletidos, elástico curto acima dos joelhos. Abrir e fechar como concha. Excelente para abdutores e glúteo médio." },
+      { name: "Dead Bug", sets: "2 séries", reps: "8 reps cada lado", tag: "Core Seguro", equipment: "Colchonete", video: "https://youtu.be/o4GKiEoYClI?si=3gKMIH74QNOrLVK-", notes: "Deitada, braços para cima, joelhos a 90°. Estenda braço oposto ao pé alternadamente, mantendo lombar colada no chão. Core profundo ativado durante todo o movimento. SEGURO para diastase." },
+    ]
+  },
+  {
+    label: "Dia B",
+    focus: "Superior I — Costas & Bíceps",
+    color: "#0F766E",
+    accent: "#2DD4BF",
+    exercises: [
+      { name: "Ativação de Core Profundo", sets: "1 série", reps: "5 min", tag: "Core", equipment: "Colchonete", video: "https://youtu.be/WIq_Ev-weGo?si=ODDb77FRc4lp4PJE", notes: "Mesma ativação do Dia A. Respiração diafragmática + transverso." },
+      { name: "Remada com Elástico", sets: "3 séries", reps: "12 reps", tag: "Costas", equipment: "Elástico longo", video: "https://youtube.com/shorts/yzCxAbfKImQ?si=nVmIWsQ-Zz2EGZ71", notes: "Sentada no chão, elástico longo nos pés. Puxe cotovelos para trás ativando escápulas. Ideal para postura pós-parto (que tende a arredondar por amamentação)." },
+      { name: "Pulldown com Elástico", sets: "3 séries", reps: "12 reps", tag: "Costas", equipment: "Elástico longo", video: "https://youtube.com/shorts/RMqMUiHW5eQ?si=v_LOF8mJtmX0fIcE", notes: "Fixe o elástico longo em ponto alto (porta, barra). Puxe para baixo com cotovelos apontando para o chão. Simula o lat pulldown." },
+      { name: "Rosca Bíceps com Elástico", sets: "3 séries", reps: "12 reps", tag: "Bíceps", equipment: "Elástico longo", video: "https://youtube.com/shorts/20xtfGZ37nw?si=ZBsR_j4AN5Ip613p", notes: "Em pé, elástico sob os pés. Cotovelos fixos ao lado do corpo." },
+      { name: "Face Pull com Elástico", sets: "3 séries", reps: "15 reps", tag: "Ombro", equipment: "Elástico longo", video: "https://youtube.com/shorts/aPiYMB9YFLI?si=IXKlrnLreo3eORl4", notes: "Elástico na altura dos olhos. Puxe para o rosto abrindo os cotovelos. Trabalha deltoide posterior e manguito — excelente para correção postural." },
+      { name: "Bird Dog", sets: "2 séries", reps: "8 reps cada lado", tag: "Core Seguro", equipment: "Colchonete", video: "https://youtube.com/shorts/YAyZS888Ugo?si=_ubG773SJi_1pXwW", notes: "De quatro apoios, estenda braço e perna opostos simultaneamente. Coluna neutra, core ativado. SEGURO para pós-cesárea e diastase." },
+    ]
+  },
+  {
+    label: "Dia C",
+    focus: "Inferior II — Quadríceps & Abdutores",
+    color: "#B45309",
+    accent: "#FCD34D",
+    exercises: [
+      { name: "Ativação de Core Profundo", sets: "1 série", reps: "5 min", tag: "Core", equipment: "Colchonete", video: "https://youtu.be/WIq_Ev-weGo?si=ODDb77FRc4lp4PJE", notes: "Respiração diafragmática + transverso. Fundação de cada sessão." },
+      { name: "Agachamento com Elástico", sets: "3 séries", reps: "15 reps", tag: "Quadríceps", equipment: "Elástico curto", video: "https://youtube.com/shorts/Ga4ogr-ji_s?si=UFbgCztKOAFwtl-x", notes: "Elástico curto roxo acima dos joelhos. Afaste os joelhos durante o movimento. Peso corporal, sem carga axial." },
+      { name: "Avanço (Lunge) Estático", sets: "3 séries", reps: "10 reps cada perna", tag: "Quadríceps", equipment: "Elástico longo", video: "https://youtube.com/shorts/dLPkgABkQ5g?si=wIqe8M3HOi5jAFlT", notes: "Passada larga, desça verticalmente. Sem salto. Controle total. Progrida com elástico longo pisado no pé da frente." },
+      { name: "Lateral Band Walk", sets: "3 séries", reps: "15 passos cada lado", tag: "Glúteo Médio", equipment: "Elástico curto", video: "https://youtube.com/shorts/bOGmr3rlFNM?si=tlXxeaCoiUdxzx8B", notes: "Elástico curto acima dos joelhos, meio agachado, dê passos laterais mantendo tensão no elástico. Glúteo médio + abdutores." },
+      { name: "Cadeira + Agachamento Isométrico", sets: "3 séries", reps: "30-45s", tag: "Quadríceps", equipment: "Parede", video: "https://youtube.com/shorts/X5BqpoNzee0?si=Z6voR-pXP_PAvSp9", notes: "Costas na parede, coxas paralelas ao chão. Mantenha. Sem impacto articular, ótimo para quadríceps." },
+      { name: "Hollow Body Hold (Progressão Iniciante)", sets: "2 séries", reps: "20-30s", tag: "Core Seguro", equipment: "Colchonete", video: "https://youtube.com/shorts/ipLwHoiXvWQ?si=_u72eQBV8lonx_Hk", notes: "Deitada, braços ao longo do corpo, eleve apenas a cabeça e ombros levemente + pernas levemente dobradas. NÃO é crunch. Core profundo ativo. Pare se sentir pressão na cicatriz." },
+    ]
+  },
+  {
+    label: "Dia D",
+    focus: "Superior II — Peito, Tríceps & Ombro",
+    color: "#9D174D",
+    accent: "#F9A8D4",
+    exercises: [
+      { name: "Ativação de Core Profundo", sets: "1 série", reps: "5 min", tag: "Core", equipment: "Colchonete", video: "https://youtu.be/WIq_Ev-weGo?si=ODDb77FRc4lp4PJE", notes: "Respiração diafragmática + transverso. Sempre." },
+      { name: "Flexão de Braço Modificada", sets: "3 séries", reps: "10-15 reps", tag: "Peito", equipment: "Colchonete", video: "https://www.youtube.com/shorts/h5ClL5IYzog", notes: "Joelhos apoiados, mãos na largura dos ombros. Evite pressão abdominal excessiva. Se sentir esforço na cicatriz, regresse para flexão na parede." },
+      { name: "Chest Press com Elástico", sets: "3 séries", reps: "12 reps", tag: "Peito", equipment: "Elástico longo", video: "https://www.youtube.com/watch?v=kdFDTSUbaXM", notes: "Deitada, elástico longo passado pelas costas, segure as pontas. Empurre para frente como supino." },
+      { name: "Elevação Lateral com Elástico", sets: "3 séries", reps: "12 reps", tag: "Ombro", equipment: "Elástico longo", video: "https://youtube.com/shorts/G8NlkR3_uCk?si=l9tXv7Q-DdE3Irs-", notes: "Em pé, elástico sob os pés. Eleve os braços lateralmente até a altura dos ombros. Cotovelos levemente flexionados." },
+      { name: "Tríceps Kickback com Elástico", sets: "3 séries", reps: "12 reps cada lado", tag: "Tríceps", equipment: "Elástico longo", video: "https://youtube.com/shorts/v_VkdTfEPeo?si=uJOjtkyGn_SQs02l", notes: "Inclinada para frente, cotovelo fixo ao lado do corpo, estenda o antebraço para trás." },
+      { name: "Prancha Modificada (Antebraços + Joelhos)", sets: "2 séries", reps: "20-30s", tag: "Core Seguro", equipment: "Colchonete", video: "https://www.youtube.com/watch?v=LNEyZJHA228", notes: "Antebraços e joelhos apoiados. Coluna neutra, transverso ativado. NÃO faça prancha completa ainda. Se houver sinal de diastase (abaulamento na linha do meio), interrompa imediatamente." },
+    ]
+  }
+];
+
+const tagColors = {
+  "Core":        { bg: "#2a2a2a", text: "#aaa" },
+  "Core Seguro": { bg: "#0d2a0d", text: "#4ade80" },
+  "Glúteo":      { bg: "#1e1030", text: "#A78BFA" },
+  "Glúteo Médio":{ bg: "#1a0e28", text: "#9d7fe8" },
+  "Posterior":   { bg: "#251a00", text: "#FCD34D" },
+  "Quadríceps":  { bg: "#2a0a0a", text: "#f87171" },
+  "Costas":      { bg: "#001a1a", text: "#2DD4BF" },
+  "Bíceps":      { bg: "#00102a", text: "#60a5fa" },
+  "Ombro":       { bg: "#2a001a", text: "#F9A8D4" },
+  "Peito":       { bg: "#1a0a00", text: "#fb923c" },
+  "Tríceps":     { bg: "#001a08", text: "#4ade80" },
+};
+
+const weekData = [
+  { day: "Segunda", label: "Dia A — Glúteos & Posterior", color: "#7C3AED" },
+  { day: "Terça",   label: "Dia B — Costas & Bíceps",    color: "#0F766E" },
+  { day: "Quarta",  label: "Descanso / Cardio",           color: "#333" },
+  { day: "Quinta",  label: "Dia C — Quadríceps & Abdutores", color: "#B45309" },
+  { day: "Sexta",   label: "Dia D — Peito, Tríceps & Ombro", color: "#9D174D" },
+  { day: "Sábado",  label: "Cardio ou Descanso",          color: "#333" },
+  { day: "Domingo", label: "Descanso",                    color: "#333" },
+];
+
+const progData = [
+  { semana: "Sem. 1–2", desc: "Foco na ativação. Reduza séries se necessário. Aprenda os movimentos." },
+  { semana: "Sem. 3–4", desc: "Aumente resistência dos elásticos em 1 nível. Adicione 2 reps por série." },
+  { semana: "Sem. 5–6", desc: "Adicione 1 série em exercícios principais. Avalie com a médica próximos passos." },
+  { semana: "Sem. 7+",  desc: "Considere avaliação com fisio pélvica para liberar movimentos mais avançados." },
+];
+
+// State
+let activeDay = 0;
+let expanded = null;
+let done = {};
+
+function countDone(dayIdx) {
+  return days[dayIdx].exercises.filter((_, i) => done[`${dayIdx}-${i}`]).length;
+}
+
+function renderTabs() {
+  const tabs = document.getElementById('tabs');
+  tabs.innerHTML = days.map((d, i) => `
+    <button class="tab-btn ${i === activeDay ? 'active' : ''}"
+      style="${i === activeDay ? `background:${d.color};border-color:${d.color};border-bottom-color:${d.color}` : ''}"
+      onclick="switchDay(${i})">${d.label}</button>
+  `).join('');
+}
+
+function renderFocus() {
+  const d = days[activeDay];
+  document.getElementById('focus-eyebrow').style.color = d.accent;
+  document.getElementById('focus-eyebrow').textContent = 'FOCO';
+  document.getElementById('focus-label').textContent = d.focus;
+  document.getElementById('counter').style.border = `1px solid ${d.color}33`;
+  const done_count = countDone(activeDay);
+  document.getElementById('counter-num').style.color = d.accent;
+  document.getElementById('counter-num').textContent = done_count;
+  document.getElementById('counter-den').textContent = `/ ${days[activeDay].exercises.length}`;
+}
+
+function renderExercises() {
+  const d = days[activeDay];
+  const list = document.getElementById('exercise-list');
+  list.innerHTML = days[activeDay].exercises.map((ex, i) => {
+    const key = `${activeDay}-${i}`;
+    const isDone = !!done[key];
+    const isOpen = expanded === i;
+    const tc = tagColors[ex.tag] || { bg: '#1a1a1a', text: '#aaa' };
+    return `
+      <div class="ex-card ${isDone ? 'done' : ''}" id="card-${i}">
+        <div class="ex-header" onclick="toggleExpand(${i})">
+          <div class="ex-check ${isDone ? 'checked' : ''}"
+            style="--day-color:${d.color}"
+            onclick="event.stopPropagation(); toggleDone(${i})">
+            ${isDone ? '✓' : ''}
+          </div>
+          <div class="ex-info">
+            <div class="ex-name">${ex.name}</div>
+            <div class="ex-meta">
+              <span class="ex-sets">${ex.sets} · ${ex.reps}</span>
+              <span class="ex-tag" style="background:${tc.bg};color:${tc.text}">${ex.tag}</span>
+            </div>
+          </div>
+          <div class="ex-chevron ${isOpen ? 'open' : ''}">▼</div>
+        </div>
+        <div class="ex-body ${isOpen ? 'open' : ''}">
+          <div class="ex-notes">${ex.notes}</div>
+          <div class="ex-actions">
+            <div class="ex-equip">🔧 ${ex.equipment}</div>
+            ${ex.video ? `<a class="ex-video" href="${ex.video}" target="_blank" onclick="event.stopPropagation()">▶ Ver vídeo</a>` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderWeek() {
+  document.getElementById('week-rows').innerHTML = weekData.map(w => `
+    <div class="week-row">
+      <div class="week-dot" style="background:${w.color}"></div>
+      <div class="week-day">${w.day}</div>
+      <div class="week-label" style="color:${w.color === '#333' ? '#444' : '#bbb'}">${w.label}</div>
+    </div>
+  `).join('');
+}
+
+function renderProg() {
+  document.getElementById('prog-rows').innerHTML = progData.map(p => `
+    <div class="prog-row">
+      <div class="prog-week">${p.semana}</div>
+      <div class="prog-desc">${p.desc}</div>
+    </div>
+  `).join('');
+}
+
+function render() {
+  renderTabs();
+  renderFocus();
+  renderExercises();
+}
+
+function switchDay(i) {
+  activeDay = i;
+  expanded = null;
+  render();
+}
+
+function toggleExpand(i) {
+  expanded = expanded === i ? null : i;
+  renderExercises();
+}
+
+function toggleDone(i) {
+  const key = `${activeDay}-${i}`;
+  done[key] = !done[key];
+  renderFocus();
+  renderExercises();
+}
+
+// Init
+render();
+renderWeek();
+renderProg();
+</script>
+</body>
+</html>
