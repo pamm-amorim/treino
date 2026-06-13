@@ -14,9 +14,8 @@
       color: #F5F5F5;
       font-family: Georgia, 'Times New Roman', serif;
       min-height: 100vh;
-      padding-bottom: 80px;
+      padding-bottom: 100px;
     }
-    a { color: inherit; }
 
     /* Header */
     #header {
@@ -63,11 +62,20 @@
       white-space: nowrap;
       transition: all 0.2s;
       border-bottom: 1px solid #2a2a2a;
+      position: relative;
     }
-    .tab-btn.active {
-      color: #fff;
-      border-bottom-color: transparent;
+    .tab-btn.active { color: #fff; border-bottom-color: transparent; }
+    .tab-dot {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+      display: none;
     }
+    .tab-btn.has-history .tab-dot { display: block; }
 
     /* Content */
     #content { padding: 24px; }
@@ -111,7 +119,6 @@
       border-color: #1a4a1a;
       opacity: 0.7;
     }
-
     .ex-header {
       display: flex;
       align-items: center;
@@ -119,7 +126,6 @@
       cursor: pointer;
       gap: 12px;
     }
-
     .ex-check {
       width: 22px;
       height: 22px;
@@ -136,20 +142,10 @@
       color: #fff;
     }
     .ex-check.checked { background: var(--day-color); border-color: var(--day-color); }
-
     .ex-info { flex: 1; min-width: 0; }
-    .ex-name {
-      font-size: 15px;
-      color: #E5E5E5;
-      margin-bottom: 4px;
-    }
+    .ex-name { font-size: 15px; color: #E5E5E5; margin-bottom: 4px; }
     .ex-card.done .ex-name { text-decoration: line-through; }
-    .ex-meta {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
+    .ex-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
     .ex-sets { font-size: 12px; color: #888; }
     .ex-tag {
       font-size: 10px;
@@ -158,7 +154,6 @@
       font-family: Arial, sans-serif;
       letter-spacing: 0.5px;
     }
-
     .ex-chevron {
       color: #444;
       font-size: 11px;
@@ -166,7 +161,6 @@
       flex-shrink: 0;
     }
     .ex-chevron.open { transform: rotate(180deg); }
-
     .ex-body {
       display: none;
       padding: 12px 16px 16px 50px;
@@ -205,20 +199,101 @@
       font-family: Arial, sans-serif;
     }
 
+    /* Log treino button */
+    #log-section {
+      margin-top: 24px;
+      background: #111116;
+      border: 1px solid #1e1e2a;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    #log-section .log-title {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: #888;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      font-family: Arial, sans-serif;
+    }
+    #btn-log {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      font-size: 15px;
+      font-family: Georgia, serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.3px;
+    }
+    #btn-log.idle {
+      background: #7C3AED;
+      color: #fff;
+    }
+    #btn-log.saved {
+      background: #0d2a0d;
+      color: #4ade80;
+      border: 1px solid #1a4a1a;
+    }
+    #btn-log:disabled { opacity: 0.6; cursor: default; }
+
+    /* History */
+    #history-section {
+      margin-top: 16px;
+    }
+    .history-title {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: #555;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      font-family: Arial, sans-serif;
+    }
+    .history-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #1a1a1a;
+      font-size: 13px;
+    }
+    .history-item:last-child { border-bottom: none; }
+    .history-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .history-dia { color: #888; width: 40px; font-family: Arial, sans-serif; }
+    .history-date { color: #555; font-family: Arial, sans-serif; font-size: 12px; }
+
+    /* Próximo treino banner */
+    #next-banner {
+      display: none;
+      margin-bottom: 16px;
+      background: #0d1a2a;
+      border: 1px solid #1a3a5a;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #7dd3fc;
+      font-family: Arial, sans-serif;
+    }
+
     /* Info boxes */
     .info-box {
-      margin-top: 28px;
+      margin-top: 20px;
       border-radius: 12px;
       padding: 16px;
     }
     .info-box.safety {
       background: #0f1a0f;
       border: 1px solid #1a4a1a;
+      margin-top: 28px;
     }
     .info-box.neutral {
       background: #111116;
       border: 1px solid #1e1e2a;
-      margin-top: 20px;
     }
     .info-box-title {
       font-size: 11px;
@@ -253,6 +328,27 @@
     .prog-row:last-child { border-bottom: none; }
     .prog-week { font-size: 11px; color: #7C3AED; width: 70px; flex-shrink: 0; padding-top: 1px; font-family: Arial, sans-serif; }
     .prog-desc { font-size: 13px; color: #888; line-height: 1.6; }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a1a1a;
+      border: 1px solid #333;
+      color: #E5E5E5;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-family: Arial, sans-serif;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 100;
+    }
+    #toast.show { opacity: 1; }
   </style>
 </head>
 <body>
@@ -265,6 +361,8 @@
 </div>
 
 <div id="content">
+  <div id="next-banner"></div>
+
   <div id="focus-row">
     <div>
       <div id="focus-eyebrow"></div>
@@ -275,9 +373,17 @@
       <div id="counter-den"></div>
     </div>
   </div>
+
   <div id="exercise-list"></div>
 
-  <!-- Safety box -->
+  <!-- Log treino -->
+  <div id="log-section">
+    <div class="log-title">Registro de Treino</div>
+    <button id="btn-log" class="idle" onclick="logTreino()">✓ Registrar treino de hoje</button>
+    <div id="history-section"></div>
+  </div>
+
+  <!-- Safety -->
   <div class="info-box safety">
     <div class="info-box-title">⚠ Sinais de Parar Imediatamente</div>
     <div class="safety-text">
@@ -303,13 +409,18 @@
   </div>
 </div>
 
+<div id="toast"></div>
+
 <script>
+// ── CONFIG ──────────────────────────────────────────────
+const SUPABASE_URL = "https://aklrsmcauyafyanqecxu.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFrbHJzbWNhdXlhZnlhbnFlY3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNzMwNjksImV4cCI6MjA5Njk0OTA2OX0.Q5ZSehlKDvHVfqDZWFq2ScaLqrTM_UEtVGQCPIpDMv8";
+
+// ── DATA ─────────────────────────────────────────────────
 const days = [
   {
-    label: "Dia A",
-    focus: "Inferior I — Glúteos & Posterior",
-    color: "#7C3AED",
-    accent: "#A78BFA",
+    label: "Dia A", focus: "Inferior I — Glúteos & Posterior",
+    color: "#7C3AED", accent: "#A78BFA",
     exercises: [
       { name: "Ativação de Core Profundo", sets: "1 série", reps: "5 min", tag: "Core", equipment: "Colchonete", video: "https://youtu.be/WIq_Ev-weGo?si=ODDb77FRc4lp4PJE", notes: "Respiração diafragmática + ativação do transverso. Deitada, inspire pelo nariz expandindo a barriga, expire pela boca contraindo o transverso (como se fosse apertar o umbigo para dentro e para cima). Base de tudo — não pule." },
       { name: "Glute Bridge", sets: "3 séries", reps: "15 reps", tag: "Glúteo", equipment: "Elástico curto", video: "https://youtube.com/shorts/p5N_fok9YCM?si=s_P6cstaHIPVz5ah", notes: "Deitada, pés apoiados, elevar o quadril contraindo glúteos. Segure 2s no topo. Progrida com elástico curto roxo nos joelhos." },
@@ -320,10 +431,8 @@ const days = [
     ]
   },
   {
-    label: "Dia B",
-    focus: "Superior I — Costas & Bíceps",
-    color: "#0F766E",
-    accent: "#2DD4BF",
+    label: "Dia B", focus: "Superior I — Costas & Bíceps",
+    color: "#0F766E", accent: "#2DD4BF",
     exercises: [
       { name: "Ativação de Core Profundo", sets: "1 série", reps: "5 min", tag: "Core", equipment: "Colchonete", video: "https://youtu.be/WIq_Ev-weGo?si=ODDb77FRc4lp4PJE", notes: "Mesma ativação do Dia A. Respiração diafragmática + transverso." },
       { name: "Remada com Elástico", sets: "3 séries", reps: "12 reps", tag: "Costas", equipment: "Elástico longo", video: "https://youtube.com/shorts/yzCxAbfKImQ?si=nVmIWsQ-Zz2EGZ71", notes: "Sentada no chão, elástico longo nos pés. Puxe cotovelos para trás ativando escápulas. Ideal para postura pós-parto (que tende a arredondar por amamentação)." },
@@ -334,10 +443,8 @@ const days = [
     ]
   },
   {
-    label: "Dia C",
-    focus: "Inferior II — Quadríceps & Abdutores",
-    color: "#B45309",
-    accent: "#FCD34D",
+    label: "Dia C", focus: "Inferior II — Quadríceps & Abdutores",
+    color: "#B45309", accent: "#FCD34D",
     exercises: [
       { name: "Ativação de Core Profundo", sets: "1 série", reps: "5 min", tag: "Core", equipment: "Colchonete", video: "https://youtu.be/WIq_Ev-weGo?si=ODDb77FRc4lp4PJE", notes: "Respiração diafragmática + transverso. Fundação de cada sessão." },
       { name: "Agachamento com Elástico", sets: "3 séries", reps: "15 reps", tag: "Quadríceps", equipment: "Elástico curto", video: "https://youtube.com/shorts/Ga4ogr-ji_s?si=UFbgCztKOAFwtl-x", notes: "Elástico curto roxo acima dos joelhos. Afaste os joelhos durante o movimento. Peso corporal, sem carga axial." },
@@ -348,10 +455,8 @@ const days = [
     ]
   },
   {
-    label: "Dia D",
-    focus: "Superior II — Peito, Tríceps & Ombro",
-    color: "#9D174D",
-    accent: "#F9A8D4",
+    label: "Dia D", focus: "Superior II — Peito, Tríceps & Ombro",
+    color: "#9D174D", accent: "#F9A8D4",
     exercises: [
       { name: "Ativação de Core Profundo", sets: "1 série", reps: "5 min", tag: "Core", equipment: "Colchonete", video: "https://youtu.be/WIq_Ev-weGo?si=ODDb77FRc4lp4PJE", notes: "Respiração diafragmática + transverso. Sempre." },
       { name: "Flexão de Braço Modificada", sets: "3 séries", reps: "10-15 reps", tag: "Peito", equipment: "Colchonete", video: "https://www.youtube.com/shorts/h5ClL5IYzog", notes: "Joelhos apoiados, mãos na largura dos ombros. Evite pressão abdominal excessiva. Se sentir esforço na cicatriz, regresse para flexão na parede." },
@@ -378,13 +483,13 @@ const tagColors = {
 };
 
 const weekData = [
-  { day: "Segunda", label: "Dia A — Glúteos & Posterior", color: "#7C3AED" },
-  { day: "Terça",   label: "Dia B — Costas & Bíceps",    color: "#0F766E" },
-  { day: "Quarta",  label: "Descanso / Cardio",           color: "#333" },
+  { day: "Segunda", label: "Dia A — Glúteos & Posterior",    color: "#7C3AED" },
+  { day: "Terça",   label: "Dia B — Costas & Bíceps",        color: "#0F766E" },
+  { day: "Quarta",  label: "Descanso / Cardio",              color: "#333" },
   { day: "Quinta",  label: "Dia C — Quadríceps & Abdutores", color: "#B45309" },
   { day: "Sexta",   label: "Dia D — Peito, Tríceps & Ombro", color: "#9D174D" },
-  { day: "Sábado",  label: "Cardio ou Descanso",          color: "#333" },
-  { day: "Domingo", label: "Descanso",                    color: "#333" },
+  { day: "Sábado",  label: "Cardio ou Descanso",             color: "#333" },
+  { day: "Domingo", label: "Descanso",                       color: "#333" },
 ];
 
 const progData = [
@@ -394,22 +499,137 @@ const progData = [
   { semana: "Sem. 7+",  desc: "Considere avaliação com fisio pélvica para liberar movimentos mais avançados." },
 ];
 
-// State
+// ── STATE ─────────────────────────────────────────────────
 let activeDay = 0;
 let expanded = null;
 let done = {};
+let history = []; // [{dia, data_treino}]
+let todayLogged = false;
 
-function countDone(dayIdx) {
-  return days[dayIdx].exercises.filter((_, i) => done[`${dayIdx}-${i}`]).length;
+// ── SUPABASE ─────────────────────────────────────────────
+async function sbFetch(path, options = {}) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    ...options,
+    headers: {
+      "apikey": SUPABASE_KEY,
+      "Authorization": `Bearer ${SUPABASE_KEY}`,
+      "Content-Type": "application/json",
+      "Prefer": "return=representation",
+      ...(options.headers || {})
+    }
+  });
+  if (!res.ok) throw new Error(await res.text());
+  const text = await res.text();
+  return text ? JSON.parse(text) : [];
 }
 
+async function loadHistory() {
+  try {
+    const data = await sbFetch("treinos?select=dia,data_treino&order=data_treino.desc&limit=20");
+    history = data;
+    const today = todayStr();
+    todayLogged = history.some(h => h.data_treino === today && h.dia === days[activeDay].label);
+    determineActiveDay();
+    render();
+    renderHistory();
+  } catch(e) {
+    console.error("Erro ao carregar histórico:", e);
+    render();
+  }
+}
+
+async function logTreino() {
+  const btn = document.getElementById('btn-log');
+  btn.disabled = true;
+  btn.textContent = "Salvando...";
+  try {
+    await sbFetch("treinos", {
+      method: "POST",
+      body: JSON.stringify({ dia: days[activeDay].label, data_treino: todayStr() })
+    });
+    todayLogged = true;
+    btn.className = "saved";
+    btn.textContent = "✓ Treino registrado!";
+    showToast("Treino salvo!");
+    await loadHistory();
+  } catch(e) {
+    btn.disabled = false;
+    btn.className = "idle";
+    btn.textContent = "✓ Registrar treino de hoje";
+    showToast("Erro ao salvar. Tente novamente.");
+  }
+}
+
+// ── LOGIC ─────────────────────────────────────────────────
+function todayStr() {
+  return new Date().toISOString().split('T')[0];
+}
+
+function formatDate(dateStr) {
+  const [y, m, d] = dateStr.split('-');
+  return `${d}/${m}`;
+}
+
+function determineActiveDay() {
+  if (history.length === 0) { activeDay = 0; return; }
+
+  // Find last logged day index
+  const lastDia = history[0].dia;
+  const lastIdx = days.findIndex(d => d.label === lastDia);
+  if (lastIdx === -1) { activeDay = 0; return; }
+
+  const today = todayStr();
+  const lastDate = history[0].data_treino;
+
+  // If already logged today, stay on that day
+  if (lastDate === today) {
+    activeDay = lastIdx;
+    return;
+  }
+
+  // Otherwise suggest next day (cycling A→B→C→D→A)
+  activeDay = (lastIdx + 1) % days.length;
+}
+
+function updateLogButton() {
+  const btn = document.getElementById('btn-log');
+  const today = todayStr();
+  const alreadyToday = history.some(h => h.data_treino === today && h.dia === days[activeDay].label);
+  if (alreadyToday) {
+    btn.className = "saved";
+    btn.textContent = "✓ Treino já registrado hoje";
+    btn.disabled = true;
+  } else {
+    btn.className = "idle";
+    btn.textContent = `✓ Registrar ${days[activeDay].label} de hoje`;
+    btn.disabled = false;
+    btn.style.background = days[activeDay].color;
+  }
+}
+
+function renderNextBanner() {
+  const banner = document.getElementById('next-banner');
+  if (history.length === 0) { banner.style.display = 'none'; return; }
+  const today = todayStr();
+  const lastDate = history[0].data_treino;
+  const lastDia = history[0].dia;
+  if (lastDate !== today) {
+    banner.style.display = 'block';
+    banner.textContent = `→ Último treino: ${lastDia} em ${formatDate(lastDate)}. Próximo sugerido: ${days[activeDay].label}.`;
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+// ── RENDER ────────────────────────────────────────────────
 function renderTabs() {
   const tabs = document.getElementById('tabs');
-  tabs.innerHTML = days.map((d, i) => `
-    <button class="tab-btn ${i === activeDay ? 'active' : ''}"
+  tabs.innerHTML = days.map((d, i) => {
+    const hasHistory = history.some(h => h.dia === d.label);
+    return `<button class="tab-btn ${i === activeDay ? 'active' : ''} ${hasHistory ? 'has-history' : ''}"
       style="${i === activeDay ? `background:${d.color};border-color:${d.color};border-bottom-color:${d.color}` : ''}"
-      onclick="switchDay(${i})">${d.label}</button>
-  `).join('');
+      onclick="switchDay(${i})">${d.label}<span class="tab-dot"></span></button>`;
+  }).join('');
 }
 
 function renderFocus() {
@@ -418,28 +638,23 @@ function renderFocus() {
   document.getElementById('focus-eyebrow').textContent = 'FOCO';
   document.getElementById('focus-label').textContent = d.focus;
   document.getElementById('counter').style.border = `1px solid ${d.color}33`;
-  const done_count = countDone(activeDay);
+  const doneCount = Object.keys(done).filter(k => k.startsWith(`${activeDay}-`) && done[k]).length;
   document.getElementById('counter-num').style.color = d.accent;
-  document.getElementById('counter-num').textContent = done_count;
-  document.getElementById('counter-den').textContent = `/ ${days[activeDay].exercises.length}`;
+  document.getElementById('counter-num').textContent = doneCount;
+  document.getElementById('counter-den').textContent = `/ ${d.exercises.length}`;
 }
 
 function renderExercises() {
   const d = days[activeDay];
-  const list = document.getElementById('exercise-list');
-  list.innerHTML = days[activeDay].exercises.map((ex, i) => {
+  document.getElementById('exercise-list').innerHTML = d.exercises.map((ex, i) => {
     const key = `${activeDay}-${i}`;
     const isDone = !!done[key];
     const isOpen = expanded === i;
     const tc = tagColors[ex.tag] || { bg: '#1a1a1a', text: '#aaa' };
     return `
-      <div class="ex-card ${isDone ? 'done' : ''}" id="card-${i}">
+      <div class="ex-card ${isDone ? 'done' : ''}">
         <div class="ex-header" onclick="toggleExpand(${i})">
-          <div class="ex-check ${isDone ? 'checked' : ''}"
-            style="--day-color:${d.color}"
-            onclick="event.stopPropagation(); toggleDone(${i})">
-            ${isDone ? '✓' : ''}
-          </div>
+          <div class="ex-check ${isDone ? 'checked' : ''}" style="--day-color:${d.color}" onclick="event.stopPropagation();toggleDone(${i})">${isDone ? '✓' : ''}</div>
           <div class="ex-info">
             <div class="ex-name">${ex.name}</div>
             <div class="ex-meta">
@@ -456,9 +671,25 @@ function renderExercises() {
             ${ex.video ? `<a class="ex-video" href="${ex.video}" target="_blank" onclick="event.stopPropagation()">▶ Ver vídeo</a>` : ''}
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
   }).join('');
+}
+
+function renderHistory() {
+  const section = document.getElementById('history-section');
+  if (history.length === 0) { section.innerHTML = ''; return; }
+  const recent = history.slice(0, 8);
+  section.innerHTML = `
+    <div class="history-title" style="margin-top:16px">Últimos treinos</div>
+    ${recent.map(h => {
+      const d = days.find(x => x.label === h.dia);
+      const color = d ? d.color : '#555';
+      return `<div class="history-item">
+        <div class="history-dot" style="background:${color}"></div>
+        <div class="history-dia">${h.dia}</div>
+        <div class="history-date">${formatDate(h.data_treino)}</div>
+      </div>`;
+    }).join('')}`;
 }
 
 function renderWeek() {
@@ -467,8 +698,7 @@ function renderWeek() {
       <div class="week-dot" style="background:${w.color}"></div>
       <div class="week-day">${w.day}</div>
       <div class="week-label" style="color:${w.color === '#333' ? '#444' : '#bbb'}">${w.label}</div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 function renderProg() {
@@ -476,20 +706,24 @@ function renderProg() {
     <div class="prog-row">
       <div class="prog-week">${p.semana}</div>
       <div class="prog-desc">${p.desc}</div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 function render() {
   renderTabs();
   renderFocus();
   renderExercises();
+  renderNextBanner();
+  updateLogButton();
 }
 
+// ── ACTIONS ───────────────────────────────────────────────
 function switchDay(i) {
   activeDay = i;
   expanded = null;
+  done = {};
   render();
+  updateLogButton();
 }
 
 function toggleExpand(i) {
@@ -504,10 +738,17 @@ function toggleDone(i) {
   renderExercises();
 }
 
-// Init
-render();
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── INIT ──────────────────────────────────────────────────
 renderWeek();
 renderProg();
+loadHistory();
 </script>
 </body>
 </html>
